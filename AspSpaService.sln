@@ -6,9 +6,6 @@ MinimumVisualStudioVersion = 15.0.26124.0
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{3B9A2AE6-B3AD-489A-B04C-CB8A16E6658B}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AspSpaService", "src\AspSpaService\AspSpaService.csproj", "{43178F7B-0A67-421D-B2CF-5B3E7F3E9950}"
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "samples", "samples", "{8D60E8C4-B1EF-4C4E-A1EF-C018BEE0B349}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConsoleApp", "samples\ConsoleApp\ConsoleApp.csproj", "{D0E4672D-8942-45C3-A725-43D915F05684}"
 EndProject
 Global

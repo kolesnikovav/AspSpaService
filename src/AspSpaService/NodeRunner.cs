@@ -60,9 +60,12 @@ namespace AspSpaService
             p.RedirectStandardInput = true;
             p.RedirectStandardOutput = true;
             p.RedirectStandardError = true;
-            foreach (var keyValuePair in this.EnvVars)
+            if (this.EnvVars != null)
             {
-                p.Environment[keyValuePair.Key] = keyValuePair.Value;
+                foreach (var keyValuePair in this.EnvVars)
+                {
+                    p.Environment[keyValuePair.Key] = keyValuePair.Value;
+                }
             }
             return p;
         }

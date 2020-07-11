@@ -1,6 +1,9 @@
 using System;
 using System.Collections.Generic;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Logging.Abstractions;
 
 namespace AspSpaService
 {
@@ -9,6 +12,7 @@ namespace AspSpaService
     /// </summary>
     public static class AspSpaServiceMiddlewareExtensions
     {
+        private const string LogCategoryName = "AspSpaService";
         /// <summary>
         /// Handles requests by passing them through to an instance of the node dev server.
         /// This means you don't need to start node dev server manually.
@@ -34,6 +38,25 @@ namespace AspSpaService
             {
                 throw new ArgumentNullException(nameof(spaBuilder));
             }
+            var logger = GetOrCreateLogger(spaBuilder, LogCategoryName);
+            NodeRunner runner = new NodeRunner();
+            runner.Command = command;
+            runner.Arguments = arguments;
+            runner.WorkingDirectory = workingDirectory;
+            runner.EnvVars = envVars;
+            runner.Timeout = timeout;
+            runner.Launch(logger);
        }
+        private static ILogger GetOrCreateLogger(
+            IApplicationBuilder appBuilder,
+            string logCategoryName)
+        {
+            // If the DI system gives us a logger, use it. Otherwise, set up a default one
+            var loggerFactory = appBuilder.ApplicationServices.GetService<ILoggerFactory>();
+            var logger = loggerFactory != null
+                ? loggerFactory.CreateLogger(logCategoryName)
+                : NullLogger.Instance;
+            return logger;
+        }
     }
 }

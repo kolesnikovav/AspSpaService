@@ -8,7 +8,10 @@ using Microsoft.Extensions.Logging;
 
 namespace AspSpaService
 {
-    internal class NodeRunner: IDisposable
+    /// <summary>
+    /// Node JS Process starter
+    /// </summary>
+    public class NodeRunner: IDisposable
     {
         private Process _nodeProcess;
         private Uri _uri;
@@ -40,6 +43,12 @@ namespace AspSpaService
     /// Environment variables for node process
     /// </summary>
         public Dictionary<string,string> EnvVars {get;set;} = new Dictionary<string, string>();
+    /// <summary>
+    /// Indicates where node process is being served
+    /// </summary>
+        public Uri Uri {
+            get => this._uri;
+        }
 
         private ProcessStartInfo GetProcessStartInfo()
         {
@@ -69,8 +78,9 @@ namespace AspSpaService
     /// <summary>
     /// Launch node process and wait untill it emits line with URL or timeout exceeds
     /// </summary>
-        public void Launch()
+        public void Launch(ILogger logger)
         {
+            this._uri = null;
             var p = this.GetProcessStartInfo();
             this._awaiter.Reset();
             try
@@ -78,6 +88,7 @@ namespace AspSpaService
                 this._nodeProcess = Process.Start(p);
                 this.streamOutputReader = new NodeStreamReader(this._nodeProcess.StandardOutput);
                 this.streamErrorReader = new NodeStreamReader(this._nodeProcess.StandardError);
+                this.AttachToLogger(logger);
                 this.streamOutputReader.OnReceivedLine += this.onResiveLineResult;
                 this._awaiter.WaitOne(this.Timeout);
             }
@@ -91,7 +102,7 @@ namespace AspSpaService
         /// Attach to logger.
         /// </summary>
         /// <param name="logger">The logger to attach </param>
-        public void AttachToLogger(ILogger logger)
+        private void AttachToLogger(ILogger logger)
         {
             // When the node task emits complete lines, pass them through to the real logger
             this.streamOutputReader.OnReceivedLine += line =>

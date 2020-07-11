@@ -88,8 +88,12 @@ namespace AspSpaService
                 this._nodeProcess = Process.Start(p);
                 this.streamOutputReader = new NodeStreamReader(this._nodeProcess.StandardOutput);
                 this.streamErrorReader = new NodeStreamReader(this._nodeProcess.StandardError);
-                this.AttachToLogger(logger);
+                if (logger != null)
+                {
+                    this.AttachToLogger(logger);
+                }
                 this.streamOutputReader.OnReceivedLine += this.onResiveLineResult;
+                this.streamErrorReader.OnReceivedLine += this.onResiveLineResult;
                 this._awaiter.WaitOne(this.Timeout);
             }
             catch(Exception ex)

@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
+using Microsoft.AspNetCore.SpaServices;
 
 namespace AspSpaService
 {
@@ -26,7 +27,7 @@ namespace AspSpaService
         /// <param name="timeout">Timeout for node process waiting</param>
         /// <param name="timeoutExceedMessage">Message when timeout is exceeded</param>
         public static void UseAspSpaDevelopmentServer(
-            this IApplicationBuilder spaBuilder,
+            this ISpaBuilder spaBuilder,
             string command,
             string arguments,
             string workingDirectory,
@@ -38,7 +39,7 @@ namespace AspSpaService
             {
                 throw new ArgumentNullException(nameof(spaBuilder));
             }
-            var logger = GetOrCreateLogger(spaBuilder, LogCategoryName);
+            var logger = GetOrCreateLogger(spaBuilder.ApplicationBuilder, LogCategoryName);
             NodeRunner runner = new NodeRunner();
             runner.Command = command;
             runner.Arguments = arguments;
@@ -46,6 +47,10 @@ namespace AspSpaService
             runner.EnvVars = envVars;
             runner.Timeout = timeout;
             runner.Launch(logger);
+            if (runner.Uri != null)
+            {
+                spaBuilder.UseProxyToSpaDevelopmentServer(runner.Uri);
+            }
        }
         private static ILogger GetOrCreateLogger(
             IApplicationBuilder appBuilder,

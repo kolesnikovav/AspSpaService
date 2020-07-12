@@ -2,6 +2,17 @@
 
   <PropertyGroup>
     <TargetFramework>netcoreapp3.1</TargetFramework>
+    <PackageId>AspSpaService</PackageId>
+    <Version>1.0.0</Version>
+    <Authors>Aleksandr Kolesnikov</Authors>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <AssemblyName>AspSpaService</AssemblyName>
+    <PackageTags>asp-net-core;spa</PackageTags>
+    <PackageProjectUrl>https://github.com/kolesnikovav/AspSpaService</PackageProjectUrl>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <RepositoryType>git</RepositoryType>
+    <RepositoryUrl>https://github.com/kolesnikovav/AspSpaService.git</RepositoryUrl>
+    <Description>The Asp Net Core plugin for integrating SPA application with Asp Net Core. This plugin can be used with any web framework in same manner.</Description>
   </PropertyGroup>
 
   <ItemGroup>

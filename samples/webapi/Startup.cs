@@ -49,6 +49,20 @@ namespace webapi
                     spa.UseAspSpaDevelopmentServer("yarn", "dev", p, new Dictionary<string,string>(), TimeSpan.FromSeconds(15), null);
                 }
             );
+            // this block starts react spa application
+            // var pReact = Path.Combine(wd,"samples", "hello-react");
+            // app.UseSpa(
+            //     spa => {
+            //         spa.UseAspSpaDevelopmentServer("yarn", "start", pReact, new Dictionary<string,string>(), TimeSpan.FromSeconds(15), null);
+            //     }
+            // );
+            // this block starts svelte spa application
+            // var pSvelte = Path.Combine(wd,"samples", "hello-svelte");
+            // app.UseSpa(
+            //     spa => {
+            //         spa.UseAspSpaDevelopmentServer("yarn", "start", pSvelte, new Dictionary<string,string>(), TimeSpan.FromSeconds(15), null);
+            //     }
+            // );
         }
     }
 }

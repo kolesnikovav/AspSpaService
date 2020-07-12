@@ -78,3 +78,36 @@ public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
 }
 
 ```
+### React
+```cs
+public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+{
+    // ---- Your code -----------//
+    //this block starts react spa application
+    var wd = Directory.GetCurrentDirectory();
+    var p = Path.Combine(wd,"samples", "hello-react"); // path to your react project
+    app.UseSpa(
+        spa => {
+            spa.UseAspSpaDevelopmentServer("yarn", "start", p, new Dictionary<string,string>(), TimeSpan.FromSeconds(15), null);
+        }
+    );
+}
+
+```
+### Svelte
+Note. Because Svelte and AspNetCore, by default, use the same port (5000), the port of Svelte should be changed!!!
+```cs
+public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+{
+    // ---- Your code -----------//
+    //this block starts svelte spa application
+    var wd = Directory.GetCurrentDirectory();
+    var p = Path.Combine(wd,"samples", "hello-svelte"); // path to your svelte project
+    app.UseSpa(
+        spa => {
+            spa.UseAspSpaDevelopmentServer("yarn", "dev", p, new Dictionary<string,string>(), TimeSpan.FromSeconds(15), null);
+        }
+    );
+}
+
+```

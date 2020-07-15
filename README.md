@@ -11,6 +11,12 @@ Change your Startup.cs configuration file as follows:
 using AspSpaService;
     public class Startup
     {
+        public void ConfigureServices(IServiceCollection services)
+        {
+            // ---- Your code -----------//
+            services.AddNodeRunner();
+        }
+
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             // ---- Your code -----------//

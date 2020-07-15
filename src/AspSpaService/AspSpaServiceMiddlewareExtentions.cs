@@ -15,6 +15,20 @@ namespace AspSpaService
     {
         private const string LogCategoryName = "AspSpaService";
         /// <summary>
+        /// Adds NodeRunner as singletone service and register it in Dependency Injection
+        /// This dispose node js process when application is shutdown
+        ///
+        /// </summary>
+        /// <param name="services">The <see cref="IServiceCollection"/>.</param>
+        public static void AddNodeRunner(this IServiceCollection services)
+        {
+            services.AddSingleton(typeof(NodeRunner));
+        }
+        private static NodeRunner GetNodeRunner(IApplicationBuilder builder)
+        {
+            return (NodeRunner)builder.ApplicationServices.GetService(typeof(NodeRunner));
+        }
+        /// <summary>
         /// Handles requests by passing them through to an instance of the node dev server.
         /// This means you don't need to start node dev server manually.
         ///
@@ -40,7 +54,11 @@ namespace AspSpaService
                 throw new ArgumentNullException(nameof(spaBuilder));
             }
             var logger = GetOrCreateLogger(spaBuilder.ApplicationBuilder, LogCategoryName);
-            NodeRunner runner = new NodeRunner();
+            NodeRunner runner = GetNodeRunner(spaBuilder.ApplicationBuilder);
+            if (runner == null)
+            {
+                runner = new NodeRunner();
+            }
             runner.Command = command;
             runner.Arguments = arguments;
             runner.WorkingDirectory = workingDirectory;

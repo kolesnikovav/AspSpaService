@@ -40,6 +40,9 @@ namespace AspSpaService
         /// <param name="envVars">Environment variables for node dev  server</param>
         /// <param name="timeout">Timeout for node process waiting</param>
         /// <param name="timeoutExceedMessage">Message when timeout is exceeded</param>
+        /// <param name="logInformation">Log node process output</param>
+        /// <param name="logError">Log node js process error</param>
+        /// <param name="unsubscribeWhenReady">Stop logging when nodejs process is ready</param>
         public static void UseAspSpaDevelopmentServer(
             this ISpaBuilder spaBuilder,
             string command,
@@ -47,7 +50,10 @@ namespace AspSpaService
             string workingDirectory,
             Dictionary<string,string> envVars,
             TimeSpan timeout,
-            string timeoutExceedMessage)
+            string timeoutExceedMessage = "Timeout has been exceeded ",
+            bool logInformation = true,
+            bool logError = false,
+            bool unsubscribeWhenReady = true)
         {
             if (spaBuilder == null)
             {
@@ -64,10 +70,19 @@ namespace AspSpaService
             runner.WorkingDirectory = workingDirectory;
             runner.EnvVars = envVars;
             runner.Timeout = timeout;
+            runner.TimeoutExceedMessage = timeoutExceedMessage;
             runner.Launch(logger);
             if (runner.Uri != null)
             {
+                if (unsubscribeWhenReady)
+                {
+                    runner.UnsubscribeLog(logger);
+                }
                 spaBuilder.UseProxyToSpaDevelopmentServer(runner.Uri);
+            }
+            else
+            {
+
             }
        }
         private static ILogger GetOrCreateLogger(

@@ -43,9 +43,17 @@ namespace AspSpaService
     /// Environment variables for node process
     /// </summary>
         public Dictionary<string,string> EnvVars {get;set;} = new Dictionary<string, string>();
-    /// <summary>
-    /// Indicates where node process is being served
-    /// </summary>
+        /// <summary>
+        /// Log Node JS Process messages
+        /// </summary>
+        public bool LogResult { get; set; } = true;
+        /// <summary>
+        /// Log Node JS Process error messages
+        /// </summary>
+        public bool LogError { get; set; } = false;
+        /// <summary>
+        /// Indicates where node process is being served
+        /// </summary>
         public Uri Uri {
             get => this._uri;
         }
@@ -91,13 +99,49 @@ namespace AspSpaService
                 this._nodeProcess = Process.Start(p);
                 this.streamOutputReader = new NodeStreamReader(this._nodeProcess.StandardOutput);
                 this.streamErrorReader = new NodeStreamReader(this._nodeProcess.StandardError);
-                if (logger != null)
-                {
-                    this.AttachToLogger(logger);
-                }
                 this.streamOutputReader.OnReceivedLine += this.onResiveLineResult;
-                this.streamErrorReader.OnReceivedLine += this.onResiveLineResult;
+                if (LogError)
+                {
+                    this.streamErrorReader.OnReceivedLine += this.onResiveLineResult;
+                }
+                this._nodeProcess.Exited += (a, b) =>
+                {
+                    if (logger != null)
+                    {
+                        logger.LogError("Node JS Process has been exited with code " + this._nodeProcess.ExitCode.ToString());
+                    }
+                };
+                var cStart = DateTime.Now;
                 this._awaiter.WaitOne(this.Timeout);
+                var cExit = DateTime.Now;
+                bool timeoutHasBeenExceeded = (this.Timeout == null) ? false : TimeSpan.Compare(cExit - cStart, this.Timeout) > 0;
+                if (this.Uri == null)
+                {
+                    //unsubscribe events
+                    this.streamOutputReader.OnReceivedLine -= this.onResiveLineResult;
+                    if (LogError)
+                    {
+                        this.streamOutputReader.OnReceivedLine -= this.onResiveLineResult;
+                    }
+                    if (this._nodeProcess != null)
+                    {
+                        logger.LogError("Disposing Node JS Process");
+                        if (this._nodeProcess != null && !this._nodeProcess.HasExited)
+                        {
+                            this._nodeProcess.Kill(true);
+                            this._nodeProcess = null;
+                        }
+                        this._uri = null;
+                        logger.LogError("Disposing Node JS Process has been disposed");
+                    }
+                    if (logger != null)
+                    {
+                        if (timeoutHasBeenExceeded)
+                        {
+                            logger.LogError(this.TimeoutExceedMessage + this.Timeout.ToString());
+                        }
+                    }
+                }
             }
             catch(Exception ex)
             {
@@ -105,29 +149,23 @@ namespace AspSpaService
                 throw new InvalidOperationException(message, ex);
             }
         }
-        /// <summary>
-        /// Attach to logger.
-        /// </summary>
-        /// <param name="logger">The logger to attach </param>
-        private void AttachToLogger(ILogger logger)
+    /// <summary>
+    /// Stop logging node process output
+    /// </summary>
+        public void UnsubscribeLog(ILogger logger)
         {
-            // When the node task emits complete lines, pass them through to the real logger
-            this.streamOutputReader.OnReceivedLine += line =>
+            this.streamOutputReader.OnReceivedLine += this.onResiveLineResult;
+            if (LogError)
             {
-                logger.LogInformation(line);
-            };
-
-            this.streamErrorReader.OnReceivedLine += line =>
-            {
-                logger.LogError(line);
-            };
+                this.streamErrorReader.OnReceivedLine += this.onResiveLineResult;
+            }
         }
         /// <summary>
         /// Stop node process and disposes resources
         /// </summary>
         public void Dispose()
         {
-            if (_nodeProcess != null && !_nodeProcess.HasExited)
+            if (this._nodeProcess != null && !this._nodeProcess.HasExited)
             {
                 this._nodeProcess.Kill(true);
                 this._nodeProcess = null;

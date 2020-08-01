@@ -1,11 +1,21 @@
 # AspSpaService
-![Nuget](https://img.shields.io/nuget/v/AspSpaService)
-<img alt="Nuget" src="https://img.shields.io/nuget/dt/AspSpaService">
+
+<a href="https://www.nuget.org/packages/AspSpaService">
+    <img alt="Nuget (with prereleases)" src="https://img.shields.io/nuget/vpre/AspSpaService">
+</a>
+<a href="https://www.nuget.org/packages/AspSpaService">
+    <img alt="Nuget" src="https://img.shields.io/nuget/dt/AspSpaService">
+</a>
 
 The Asp Net Core plugin for integrating SPA application with Asp Net Core.
 This plugin can be used with any web framework in same manner.
 
 # Usage
+Install package via nugget
+```
+dotnet add package AspSpaService
+```
+
 Change your Startup.cs configuration file as follows:
 ```cs
 using AspSpaService;
@@ -25,13 +35,43 @@ using AspSpaService;
             var p = Path.Combine(wd,"samples", "hello-vue"); // path to your vuejs project
             app.UseSpa(
                 spa => {
-                    spa.UseAspSpaDevelopmentServer("yarn", "serve", p, new Dictionary<string,string>(), TimeSpan.FromSeconds(15), null);
+                    spa.UseAspSpaDevelopmentServer(
+                        // command for nodejs process
+                        // string
+                        "yarn",
+                        // argument for nodejs process
+                        // string
+                        "serve",
+                        // working directory
+                        // string
+                        p,
+                        // environment variables
+                        new Dictionary<string,string>(),
+                        // timeout for waiting node js process is ready to use
+                         TimeSpan.FromSeconds(15),
+                         // message when timeout has been exceeded
+                         // has defaul value = "Timeout has been exceeded" (can be ommited!)
+                         // string
+                          "Timeout has been exceeded",
+                          //logInformation for node js process
+                          // bool (true by default)
+                          true,
+                          //logError for node js process
+                          // some bundler emits many error strings during compilation
+                          // bool (false by default)
+                          false,
+                          //unsubscribeWhenReady
+                          // stop logging nodejs output when it ready to use
+                          // bool (true by default)
+                          true
+                          );
                 }
             );
         }
     }
 
 ```
+This library starts NodeJS process, and waiting for it emits line with served valid Uri
 
 ## Sample configuratons
 In folder sample/webapi has the web empty project that shows, how to use your favorite web framework with asp.
@@ -46,7 +86,7 @@ public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
     var p = Path.Combine(wd,"samples", "hello-vue"); // path to your vuejs project
     app.UseSpa(
         spa => {
-            spa.UseAspSpaDevelopmentServer("yarn", "serve", p, new Dictionary<string,string>(), TimeSpan.FromSeconds(15), null);
+            spa.UseAspSpaDevelopmentServer("yarn", "serve", p, new Dictionary<string,string>(), TimeSpan.FromSeconds(15), "Timeout has been exceeded");
         }
     );
 }
@@ -62,7 +102,7 @@ public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
     var p = Path.Combine(wd,"samples", "hello-vite"); // path to your vitejs project
     app.UseSpa(
         spa => {
-            spa.UseAspSpaDevelopmentServer("yarn", "dev", p, new Dictionary<string,string>(), TimeSpan.FromSeconds(15), null);
+            spa.UseAspSpaDevelopmentServer("yarn", "dev", p, new Dictionary<string,string>(), TimeSpan.FromSeconds(15), "Timeout has been exceeded");
         }
     );
 }
@@ -78,7 +118,7 @@ public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
     var p = Path.Combine(wd,"samples", "hello-nuxt"); // path to your nuxt project
     app.UseSpa(
         spa => {
-            spa.UseAspSpaDevelopmentServer("yarn", "dev", p, new Dictionary<string,string>(), TimeSpan.FromSeconds(15), null);
+            spa.UseAspSpaDevelopmentServer("yarn", "dev", p, new Dictionary<string,string>(), TimeSpan.FromSeconds(15), "Timeout has been exceeded");
         }
     );
 }
@@ -94,7 +134,7 @@ public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
     var p = Path.Combine(wd,"samples", "hello-react"); // path to your react project
     app.UseSpa(
         spa => {
-            spa.UseAspSpaDevelopmentServer("yarn", "start", p, new Dictionary<string,string>(), TimeSpan.FromSeconds(15), null);
+            spa.UseAspSpaDevelopmentServer("yarn", "start", p, new Dictionary<string,string>(), TimeSpan.FromSeconds(15), "Timeout has been exceeded");
         }
     );
 }
@@ -111,7 +151,7 @@ public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
     var p = Path.Combine(wd,"samples", "hello-svelte"); // path to your svelte project
     app.UseSpa(
         spa => {
-            spa.UseAspSpaDevelopmentServer("yarn", "dev", p, new Dictionary<string,string>(), TimeSpan.FromSeconds(15), null);
+            spa.UseAspSpaDevelopmentServer("yarn", "dev", p, new Dictionary<string,string>(), TimeSpan.FromSeconds(15), "Timeout has been exceeded");
         }
     );
 }

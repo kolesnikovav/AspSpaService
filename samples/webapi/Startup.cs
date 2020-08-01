@@ -33,7 +33,7 @@ namespace webapi
             // var p = Path.Combine(wd,"samples", "hello-vue");
             // app.UseSpa(
             //     spa => {
-            //         spa.UseAspSpaDevelopmentServer("yarn", "serve", p, new Dictionary<string,string>(), TimeSpan.FromSeconds(15), null);
+            //         spa.UseAspSpaDevelopmentServer("yarn", "serve", p, new Dictionary<string,string>(), TimeSpan.FromSeconds(10), "Timeout has been exceeded");
             //     }
             // );
             // // this block starts vite spa application
@@ -47,7 +47,7 @@ namespace webapi
             var p = Path.Combine(wd,"samples", "hello-nuxt");
             app.UseSpa(
                 spa => {
-                    spa.UseAspSpaDevelopmentServer("yarn", "dev", p, new Dictionary<string,string>(), TimeSpan.FromSeconds(15), null);
+                    spa.UseAspSpaDevelopmentServer("yarn", "dev", p, new Dictionary<string,string>(), TimeSpan.FromSeconds(10), null);
                 }
             );
             // this block starts react spa application

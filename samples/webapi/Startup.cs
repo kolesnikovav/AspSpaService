@@ -37,19 +37,19 @@ namespace webapi
             //     }
             // );
             // // this block starts vite spa application
-            // var p = Path.Combine(wd,"samples", "hello-vite");
-            // app.UseSpa(
-            //     spa => {
-            //         spa.UseAspSpaDevelopmentServer("yarn", "dev", p, new Dictionary<string,string>(), TimeSpan.FromSeconds(15), null);
-            //     }
-            // );
-            // this block starts nuxt spa application
-            var p = Path.Combine(wd,"samples", "hello-nuxt");
+            var p = Path.Combine(wd,"samples", "hello-vite");
             app.UseSpa(
                 spa => {
-                    spa.UseAspSpaDevelopmentServer("yarn", "dev", p, new Dictionary<string,string>(), TimeSpan.FromSeconds(10), null);
+                    spa.UseAspSpaDevelopmentServer("yarn", "dev", p, new Dictionary<string,string>(), TimeSpan.FromSeconds(15), null);
                 }
             );
+            // this block starts nuxt spa application
+            // var p = Path.Combine(wd,"samples", "hello-nuxt");
+            // app.UseSpa(
+            //     spa => {
+            //         spa.UseAspSpaDevelopmentServer("yarn", "dev", p, new Dictionary<string,string>(), TimeSpan.FromSeconds(10), null);
+            //     }
+            // );
             // this block starts react spa application
             // var pReact = Path.Combine(wd,"samples", "hello-react");
             // app.UseSpa(

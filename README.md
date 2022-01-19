@@ -8,12 +8,18 @@
 </a>
 
 The Asp Net Core plugin for integrating SPA application with Asp Net Core.
+Simplify SPA site development
 This plugin can be used with any web framework in same manner.
 
 # Usage
-Install package via nugget
+Install package via NuGet
 ```
 dotnet add package AspSpaService
+```
+# Install all the dependencies defined in Your SPA application
+```
+cd <SPA application path>
+yarn // or npm install
 ```
 
 Change your Startup.cs configuration file as follows:
@@ -32,7 +38,7 @@ using AspSpaService;
             // ---- Your code -----------//
             //this block starts vue spa application
             var wd = Directory.GetCurrentDirectory();
-            var p = Path.Combine(wd,"samples", "hello-vue"); // path to your vuejs project
+            var p = Path.Combine(wd,"samples", "hello-vite"); // path to your vuejs project
             app.UseSpa(
                 spa => {
                     spa.UseAspSpaDevelopmentServer(
@@ -41,7 +47,7 @@ using AspSpaService;
                         "yarn",
                         // argument for nodejs process
                         // string
-                        "serve",
+                        "dev",
                         // working directory
                         // string
                         p,

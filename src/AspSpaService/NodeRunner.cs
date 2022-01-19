@@ -15,7 +15,7 @@ namespace AspSpaService
     {
         private Process _nodeProcess;
         private Uri _uri;
-        private Regex _regexUri = new Regex(@"http:\/\/localhost:[0-9]+");
+        private Regex _regexUri = new Regex(@"(http|https):\/\/localhost:[0-9]+");
         private EventWaitHandle _awaiter = new EventWaitHandle(false, EventResetMode.AutoReset);
         private NodeStreamReader streamOutputReader;
         private NodeStreamReader streamErrorReader;
@@ -114,7 +114,7 @@ namespace AspSpaService
                 var cStart = DateTime.Now;
                 this._awaiter.WaitOne(this.Timeout);
                 var cExit = DateTime.Now;
-                bool timeoutHasBeenExceeded = (this.Timeout == null) ? false : TimeSpan.Compare(cExit - cStart, this.Timeout) > 0;
+                bool timeoutHasBeenExceeded = TimeSpan.Compare(cExit - cStart, this.Timeout) > 0;
                 if (this.Uri == null)
                 {
                     //unsubscribe events

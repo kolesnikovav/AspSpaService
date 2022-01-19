@@ -16,7 +16,7 @@ Install package via NuGet
 ```
 dotnet add package AspSpaService
 ```
-# Install all the dependencies defined in Your SPA application
+Install all the dependencies defined in Your SPA application
 ```
 cd <SPA application path>
 yarn // or npm install

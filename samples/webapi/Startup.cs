@@ -40,7 +40,7 @@ namespace webapi
             var p = Path.Combine(wd,"samples", "hello-vite");
             app.UseSpa(
                 spa => {
-                    spa.UseAspSpaDevelopmentServer("yarn", "dev", p, new Dictionary<string,string>(), TimeSpan.FromSeconds(15), null);
+                    spa.UseAspSpaDevelopmentServer("yarn", "dev", p, new Dictionary<string,string>(), TimeSpan.FromSeconds(15), null, true);
                 }
             );
             // this block starts nuxt spa application

@@ -63,6 +63,10 @@ namespace AspSpaService
             NodeRunner runner = GetNodeRunner(spaBuilder.ApplicationBuilder);
             runner ??= new NodeRunner();
             runner.Command = command;
+            if (OperatingSystem.IsWindows()) 
+            {
+                runner.Command = $"{command}.cmd";
+            }
             runner.Arguments = arguments;
             runner.WorkingDirectory = workingDirectory;
             runner.EnvVars = envVars;

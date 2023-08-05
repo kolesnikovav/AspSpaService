@@ -14,7 +14,7 @@ namespace AspSpaService
     {
         private Process _nodeProcess;
         private Uri _uri;
-        private readonly Regex _regexUri = new (@"(http|https):\/\/localhost:[0-9]+");
+        private readonly Regex _regexUri = new (@"(http|https):\/\/(localhost|127\.0\.0\.1):[0-9]+");
         private readonly EventWaitHandle _awaiter = new (false, EventResetMode.AutoReset);
         private NodeStreamReader streamOutputReader;
         private NodeStreamReader streamErrorReader;

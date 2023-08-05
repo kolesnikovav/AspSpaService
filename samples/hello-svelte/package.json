@@ -1,21 +1,23 @@
 {
-  "name": "svelte-app",
-  "version": "1.0.0",
-  "scripts": {
-    "build": "rollup -c",
-    "dev": "rollup -c -w",
-    "start": "sirv public --port 5555"
-  },
-  "devDependencies": {
-    "@rollup/plugin-commonjs": "^12.0.0",
-    "@rollup/plugin-node-resolve": "^8.0.0",
-    "rollup": "^2.3.4",
-    "rollup-plugin-livereload": "^1.0.0",
-    "rollup-plugin-svelte": "^5.0.3",
-    "rollup-plugin-terser": "^5.1.2",
-    "svelte": "^3.0.0"
-  },
-  "dependencies": {
-    "sirv-cli": "^0.4.4"
-  }
+	"name": "hello-svelte",
+	"version": "0.0.1",
+	"scripts": {
+		"dev": "vite dev",
+		"build": "vite build",
+		"preview": "vite preview",
+		"check": "svelte-kit sync && svelte-check --tsconfig ./jsconfig.json",
+		"check:watch": "svelte-kit sync && svelte-check --tsconfig ./jsconfig.json --watch"
+	},
+	"devDependencies": {
+		"@fontsource/fira-mono": "^4.5.10",
+		"@neoconfetti/svelte": "^1.0.0",
+		"@sveltejs/adapter-auto": "^2.0.0",
+		"@sveltejs/kit": "^1.20.4",
+		"@types/cookie": "^0.5.1",
+		"svelte": "^4.0.5",
+		"svelte-check": "^3.4.3",
+		"typescript": "^5.0.0",
+		"vite": "^4.4.2"
+	},
+	"type": "module"
 }

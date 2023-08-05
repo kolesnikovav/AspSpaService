@@ -39,8 +39,8 @@ rVite.Dispose();
 var pNuxt = Path.Combine(wd, "samples", "hello-nuxt");
 NodeRunner rNuxt = new()
 {
-    Command = "yarn",
-    Arguments = "dev",
+    Command = "pnpm",
+    Arguments = "run dev -o",
     WorkingDirectory = pNuxt,
     Timeout = TimeSpan.FromSeconds(10)
 };

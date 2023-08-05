@@ -1,16 +1,16 @@
 {
-  "name": "hello-nuxt",
-  "version": "1.0.0",
+  "name": "nuxt-app",
   "private": true,
   "scripts": {
-    "dev": "nuxt",
     "build": "nuxt build",
-    "start": "nuxt start",
-    "export": "nuxt export",
-    "serve": "nuxt serve"
+    "dev": "nuxt dev",
+    "generate": "nuxt generate",
+    "preview": "nuxt preview",
+    "postinstall": "nuxt prepare"
   },
-  "dependencies": {
-    "nuxt": "^2.13.0"
-  },
-  "devDependencies": {}
+  "devDependencies": {
+    "@nuxt/devtools": "latest",
+    "@types/node": "^18.17.1",
+    "nuxt": "^3.6.5"
+  }
 }

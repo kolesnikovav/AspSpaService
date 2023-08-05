@@ -26,7 +26,7 @@ namespace webapi
             //         spa.UseAspSpaDevelopmentServer("yarn", "serve", p, new Dictionary<string,string>(), TimeSpan.FromSeconds(10), "Timeout has been exceeded");
             //     }
             // );
-            // // this block starts vite spa application
+            // this block starts vite spa application
             var p = Path.Combine(wd,"samples", "hello-vite");
             app.UseSpa(
                 spa => {
@@ -37,21 +37,21 @@ namespace webapi
             // var p = Path.Combine(wd,"samples", "hello-nuxt");
             // app.UseSpa(
             //     spa => {
-            //         spa.UseAspSpaDevelopmentServer("yarn", "dev", p, new Dictionary<string,string>(), TimeSpan.FromSeconds(10), null);
+            //         spa.UseAspSpaDevelopmentServer("pnpm", "run dev -o", p, new Dictionary<string,string>(), TimeSpan.FromSeconds(10), null);
             //     }
             // );
-            // this block starts react spa application
-            // var pReact = Path.Combine(wd,"samples", "hello-react");
+            // this block starts next-react spa application
+            // var pReact = Path.Combine(wd,"samples", "hello-next-react");
             // app.UseSpa(
             //     spa => {
-            //         spa.UseAspSpaDevelopmentServer("yarn", "start", pReact, new Dictionary<string,string>(), TimeSpan.FromSeconds(15), null);
+            //         spa.UseAspSpaDevelopmentServer("npm", "run dev", pReact, new Dictionary<string,string>(), TimeSpan.FromSeconds(15), null);
             //     }
             // );
             // this block starts svelte spa application
             // var pSvelte = Path.Combine(wd,"samples", "hello-svelte");
             // app.UseSpa(
             //     spa => {
-            //         spa.UseAspSpaDevelopmentServer("yarn", "start", pSvelte, new Dictionary<string,string>(), TimeSpan.FromSeconds(15), null);
+            //         spa.UseAspSpaDevelopmentServer("npm", "run dev", pSvelte, new Dictionary<string,string>(), TimeSpan.FromSeconds(15), null);
             //     }
             // );
         }

@@ -19,7 +19,7 @@ dotnet add package AspSpaService
 Install all the dependencies defined in Your SPA application
 ```
 cd <SPA application path>
-yarn // or npm install
+yarn // or npm install or pnpm install
 ```
 
 Change your Startup.cs configuration file as follows:

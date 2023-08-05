@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Threading;
 using System.Text.RegularExpressions;
-using System.IO;
 using Microsoft.Extensions.Logging;
 
 namespace AspSpaService
@@ -15,8 +14,8 @@ namespace AspSpaService
     {
         private Process _nodeProcess;
         private Uri _uri;
-        private Regex _regexUri = new Regex(@"(http|https):\/\/localhost:[0-9]+");
-        private EventWaitHandle _awaiter = new EventWaitHandle(false, EventResetMode.AutoReset);
+        private readonly Regex _regexUri = new (@"(http|https):\/\/(localhost|127\.0\.0\.1):[0-9]+");
+        private readonly EventWaitHandle _awaiter = new (false, EventResetMode.AutoReset);
         private NodeStreamReader streamOutputReader;
         private NodeStreamReader streamErrorReader;
     /// <summary>
@@ -55,35 +54,37 @@ namespace AspSpaService
         /// Indicates where node process is being served
         /// </summary>
         public Uri Uri {
-            get => this._uri;
+            get => _uri;
         }
 
         private ProcessStartInfo GetProcessStartInfo()
         {
-            ProcessStartInfo p = new ProcessStartInfo();
-            p.Arguments = this.Arguments;
-            p.UseShellExecute = false;
-            p.WorkingDirectory = this.WorkingDirectory;
-            p.FileName = this.Command;
-            p.RedirectStandardInput = true;
-            p.RedirectStandardOutput = true;
-            p.RedirectStandardError = true;
-            if (this.EnvVars != null)
+            ProcessStartInfo p = new()
             {
-                foreach (var keyValuePair in this.EnvVars)
+                Arguments = Arguments,
+                UseShellExecute = false,
+                WorkingDirectory = WorkingDirectory,
+                FileName = Command,
+                RedirectStandardInput = true,
+                RedirectStandardOutput = true,
+                RedirectStandardError = true
+            };
+            if (EnvVars != null)
+            {
+                foreach (var keyValuePair in EnvVars)
                 {
                     p.Environment[keyValuePair.Key] = keyValuePair.Value;
                 }
             }
             return p;
         }
-        private void onResiveLineResult(string line)
+        private void OnResiveLineResult(string line)
         {
-            var u = this._regexUri.Match(line);
+            var u = _regexUri.Match(line);
             if (u.Success)
             {
-                this._uri = new Uri(u.Value);
-                this._awaiter.Set();
+                _uri = new Uri(u.Value);
+                _awaiter.Set();
             }
         }
     /// <summary>
@@ -91,54 +92,51 @@ namespace AspSpaService
     /// </summary>
         public void Launch(ILogger logger)
         {
-            this._uri = null;
-            var p = this.GetProcessStartInfo();
-            this._awaiter.Reset();
+            _uri = null;
+            var p = GetProcessStartInfo();
+            _awaiter.Reset();
             try
             {
-                this._nodeProcess = Process.Start(p);
-                this.streamOutputReader = new NodeStreamReader(this._nodeProcess.StandardOutput);
-                this.streamErrorReader = new NodeStreamReader(this._nodeProcess.StandardError);
-                this.streamOutputReader.OnReceivedLine += this.onResiveLineResult;
+                _nodeProcess = Process.Start(p);
+                streamOutputReader = new NodeStreamReader(_nodeProcess.StandardOutput);
+                streamErrorReader = new NodeStreamReader(_nodeProcess.StandardError);
+                streamOutputReader.OnReceivedLine += OnResiveLineResult;
                 if (LogError)
                 {
-                    this.streamErrorReader.OnReceivedLine += this.onResiveLineResult;
+                    streamErrorReader.OnReceivedLine += OnResiveLineResult;
                 }
-                this._nodeProcess.Exited += (a, b) =>
+                _nodeProcess.Exited += (a, b) =>
                 {
-                    if (logger != null)
-                    {
-                        logger.LogError("Node JS Process has been exited with code " + this._nodeProcess.ExitCode.ToString());
-                    }
+                    logger?.LogError("Node JS Process has been exited with code " + _nodeProcess.ExitCode.ToString());
                 };
                 var cStart = DateTime.Now;
-                this._awaiter.WaitOne(this.Timeout);
+                _awaiter.WaitOne(Timeout);
                 var cExit = DateTime.Now;
-                bool timeoutHasBeenExceeded = TimeSpan.Compare(cExit - cStart, this.Timeout) > 0;
-                if (this.Uri == null)
+                bool timeoutHasBeenExceeded = TimeSpan.Compare(cExit - cStart, Timeout) > 0;
+                if (Uri == null)
                 {
                     //unsubscribe events
-                    this.streamOutputReader.OnReceivedLine -= this.onResiveLineResult;
+                    streamOutputReader.OnReceivedLine -= OnResiveLineResult;
                     if (LogError)
                     {
-                        this.streamOutputReader.OnReceivedLine -= this.onResiveLineResult;
+                        streamOutputReader.OnReceivedLine -= OnResiveLineResult;
                     }
-                    if (this._nodeProcess != null)
+                    if (_nodeProcess != null)
                     {
                         logger.LogError("Disposing Node JS Process");
-                        if (this._nodeProcess != null && !this._nodeProcess.HasExited)
+                        if (_nodeProcess != null && !_nodeProcess.HasExited)
                         {
-                            this._nodeProcess.Kill(true);
-                            this._nodeProcess = null;
+                            _nodeProcess.Kill(true);
+                            _nodeProcess = null;
                         }
-                        this._uri = null;
+                        _uri = null;
                         logger.LogError("Disposing Node JS Process has been disposed");
                     }
                     if (logger != null)
                     {
                         if (timeoutHasBeenExceeded)
                         {
-                            logger.LogError(this.TimeoutExceedMessage + this.Timeout.ToString());
+                            logger.LogError(TimeoutExceedMessage + Timeout.ToString());
                         }
                     }
                 }
@@ -154,10 +152,10 @@ namespace AspSpaService
     /// </summary>
         public void UnsubscribeLog(ILogger logger)
         {
-            this.streamOutputReader.OnReceivedLine += this.onResiveLineResult;
+            streamOutputReader.OnReceivedLine += OnResiveLineResult;
             if (LogError)
             {
-                this.streamErrorReader.OnReceivedLine += this.onResiveLineResult;
+                streamErrorReader.OnReceivedLine += OnResiveLineResult;
             }
         }
         /// <summary>
@@ -165,13 +163,13 @@ namespace AspSpaService
         /// </summary>
         public void Dispose()
         {
-            if (this._nodeProcess != null && !this._nodeProcess.HasExited)
+            if (_nodeProcess != null && !_nodeProcess.HasExited)
             {
-                this._nodeProcess.Kill(true);
-                this._nodeProcess = null;
+                _nodeProcess.Kill(true);
+                _nodeProcess = null;
             }
-            this.streamOutputReader.Dispose();
-            this.streamErrorReader.Dispose();
+            streamOutputReader.Dispose();
+            streamErrorReader.Dispose();
         }
     }
 }

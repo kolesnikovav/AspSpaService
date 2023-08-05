@@ -1,14 +1,4 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Http;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
 using AspSpaService;
-using System.IO;
 
 namespace webapi
 {
@@ -36,32 +26,32 @@ namespace webapi
             //         spa.UseAspSpaDevelopmentServer("yarn", "serve", p, new Dictionary<string,string>(), TimeSpan.FromSeconds(10), "Timeout has been exceeded");
             //     }
             // );
-            // // this block starts vite spa application
+            // this block starts vite spa application
             var p = Path.Combine(wd,"samples", "hello-vite");
             app.UseSpa(
                 spa => {
-                    spa.UseAspSpaDevelopmentServer("yarn", "dev", p, new Dictionary<string,string>(), TimeSpan.FromSeconds(15), null);
+                    spa.UseAspSpaDevelopmentServer("yarn", "dev", p, new Dictionary<string,string>(), TimeSpan.FromSeconds(15), null, true);
                 }
             );
             // this block starts nuxt spa application
             // var p = Path.Combine(wd,"samples", "hello-nuxt");
             // app.UseSpa(
             //     spa => {
-            //         spa.UseAspSpaDevelopmentServer("yarn", "dev", p, new Dictionary<string,string>(), TimeSpan.FromSeconds(10), null);
+            //         spa.UseAspSpaDevelopmentServer("pnpm", "run dev -o", p, new Dictionary<string,string>(), TimeSpan.FromSeconds(10), null);
             //     }
             // );
-            // this block starts react spa application
-            // var pReact = Path.Combine(wd,"samples", "hello-react");
+            // this block starts next-react spa application
+            // var pReact = Path.Combine(wd,"samples", "hello-next-react");
             // app.UseSpa(
             //     spa => {
-            //         spa.UseAspSpaDevelopmentServer("yarn", "start", pReact, new Dictionary<string,string>(), TimeSpan.FromSeconds(15), null);
+            //         spa.UseAspSpaDevelopmentServer("npm", "run dev", pReact, new Dictionary<string,string>(), TimeSpan.FromSeconds(15), null);
             //     }
             // );
             // this block starts svelte spa application
             // var pSvelte = Path.Combine(wd,"samples", "hello-svelte");
             // app.UseSpa(
             //     spa => {
-            //         spa.UseAspSpaDevelopmentServer("yarn", "start", pSvelte, new Dictionary<string,string>(), TimeSpan.FromSeconds(15), null);
+            //         spa.UseAspSpaDevelopmentServer("npm", "run dev", pSvelte, new Dictionary<string,string>(), TimeSpan.FromSeconds(15), null);
             //     }
             // );
         }

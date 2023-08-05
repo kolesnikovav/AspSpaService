@@ -1,8 +1,5 @@
 using System;
 using System.IO;
-using System.Text;
-using System.Text.RegularExpressions;
-using System.Threading;
 using System.Threading.Tasks;
 
 namespace AspSpaService
@@ -16,7 +13,7 @@ namespace AspSpaService
         public delegate void OnReceivedLineHandler(string line);
         public event OnReceivedLineHandler OnReceivedLine;
         private readonly StreamReader _streamReader;
-        private Task _taskReading;
+        private readonly Task _taskReading;
         public NodeStreamReader(StreamReader streamReader)
         {
             _streamReader = streamReader ?? throw new ArgumentNullException(nameof(streamReader));
@@ -27,7 +24,7 @@ namespace AspSpaService
             while (true)
             {
                 var recivedLine = await _streamReader.ReadLineAsync();
-                if (!String.IsNullOrWhiteSpace(recivedLine))
+                if (!string.IsNullOrWhiteSpace(recivedLine))
                 {
                     OnReceivedLine(recivedLine);
                 }
@@ -36,10 +33,7 @@ namespace AspSpaService
         public void Dispose()
         {
             _streamReader.Dispose();
-            if (_taskReading != null)
-            {
-                _taskReading.Dispose();
-            }
+            _taskReading?.Dispose();
         }
     }
 }

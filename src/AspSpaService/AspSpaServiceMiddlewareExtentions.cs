@@ -61,11 +61,12 @@ namespace AspSpaService
             }
             var logger = GetOrCreateLogger(spaBuilder.ApplicationBuilder, LogCategoryName);
             NodeRunner runner = GetNodeRunner(spaBuilder.ApplicationBuilder);
-            if (runner == null)
-            {
-                runner = new NodeRunner();
-            }
+            runner ??= new NodeRunner();
             runner.Command = command;
+            if (OperatingSystem.IsWindows()) 
+            {
+                runner.Command = $"{command}.cmd";
+            }
             runner.Arguments = arguments;
             runner.WorkingDirectory = workingDirectory;
             runner.EnvVars = envVars;

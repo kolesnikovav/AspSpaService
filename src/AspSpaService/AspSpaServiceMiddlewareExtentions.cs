@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
@@ -63,7 +64,7 @@ namespace AspSpaService
             NodeRunner runner = GetNodeRunner(spaBuilder.ApplicationBuilder);
             runner ??= new NodeRunner();
             runner.Command = command;
-            if (OperatingSystem.IsWindows()) 
+            if (OperatingSystem.IsWindows() && !Path.HasExtension(command)) 
             {
                 runner.Command = $"{command}.cmd";
             }

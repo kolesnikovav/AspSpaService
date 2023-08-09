@@ -8,6 +8,16 @@
             "preLaunchTask": "build",
             "program": "${workspaceFolder}/samples/webapi/bin/Debug/net7.0/webapi.dll",
             "args": [],
+            "justMyCode": false,
+            "suppressJITOptimizations": true,
+            "symbolOptions": {
+                "searchPaths": [
+                    "${workspaceFolder}/samples/webapi/bin/Debug",
+                    "https://msdl.microsoft.com/download/symbols"
+                ],
+                "searchMicrosoftSymbolServer": true,
+                "searchNuGetOrgSymbolServer": true
+            },
             "cwd": "${workspaceFolder}",
             "stopAtEntry": false,
             "serverReadyAction": {

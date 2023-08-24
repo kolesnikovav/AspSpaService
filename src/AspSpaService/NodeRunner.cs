@@ -59,16 +59,38 @@ namespace AspSpaService
 
         private ProcessStartInfo GetProcessStartInfo()
         {
-            ProcessStartInfo p = new()
+            var exeCmd = OperatingSystem.IsWindows() ? "cmd" : Command;
+
+            var argumentsLaunch = OperatingSystem.IsWindows() ? $"/c {Command} {Arguments}" : Arguments;
+            ProcessStartInfo p;
+            if (OperatingSystem.IsWindows())
             {
-                Arguments = Arguments,
-                UseShellExecute = false,
-                WorkingDirectory = WorkingDirectory,
-                FileName = Command,
-                RedirectStandardInput = true,
-                RedirectStandardOutput = true,
-                RedirectStandardError = true
-            };
+                p = new(exeCmd)
+                {
+                    Arguments = argumentsLaunch,
+                    UseShellExecute = false,
+                    WorkingDirectory = WorkingDirectory,
+                    WindowStyle = ProcessWindowStyle.Hidden,
+                    Domain = Environment.UserDomainName,
+                    UserName = Environment.UserName,
+                    RedirectStandardInput = true,
+                    RedirectStandardOutput = true,
+                    RedirectStandardError = true
+                };
+            }
+            else
+            {
+                p = new(exeCmd)
+                {
+                    Arguments = argumentsLaunch,
+                    UseShellExecute = false,
+                    WorkingDirectory = WorkingDirectory,
+                    RedirectStandardInput = true,
+                    RedirectStandardOutput = true,
+                    RedirectStandardError = true
+                };
+            }
+
             if (EnvVars != null)
             {
                 foreach (var keyValuePair in EnvVars)

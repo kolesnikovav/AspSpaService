@@ -57,6 +57,20 @@ namespace AspSpaService
             get => _uri;
         }
 
+        private System.Security.SecureString ConvertToSecureString(string password)
+        {
+            if (password == null)
+                throw new ArgumentNullException("password");
+
+            var securePassword = new System.Security.SecureString();
+
+            foreach (char c in password)
+                securePassword.AppendChar(c);
+
+            securePassword.MakeReadOnly();
+            return securePassword;
+        }
+
         private ProcessStartInfo GetProcessStartInfo()
         {
             var exeCmd = OperatingSystem.IsWindows() ? "cmd" : Command;
@@ -120,6 +134,7 @@ namespace AspSpaService
             try
             {
                 _nodeProcess = Process.Start(p);
+                _nodeProcess.EnableRaisingEvents = true;
                 streamOutputReader = new NodeStreamReader(_nodeProcess.StandardOutput);
                 streamErrorReader = new NodeStreamReader(_nodeProcess.StandardError);
                 streamOutputReader.OnReceivedLine += OnResiveLineResult;

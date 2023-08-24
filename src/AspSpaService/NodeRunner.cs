@@ -93,6 +93,10 @@ public class NodeRunner : IDisposable
             {
                 s_fin = s_fin[..^1];
             }
+            if (LogResult && !string.IsNullOrEmpty(s_fin))
+            {
+                Console.WriteLine(s_fin);
+            }
             var u = _regexUri.Match(s_fin);
             if (u.Success)
             {

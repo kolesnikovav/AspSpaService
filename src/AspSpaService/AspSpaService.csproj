@@ -16,6 +16,7 @@
     <Description>The Asp Net Core plugin for integrating SPA application with Asp Net Core. This plugin can be used with any web framework in same manner.</Description>
     <Keywords>ASP;Asp Net Core; SPA; vue; vite; nuxt; react; svelte</Keywords>
     <PackageReadmeFile>README.md</PackageReadmeFile>
+    <LangVersion>11.0</LangVersion>
   </PropertyGroup>
 
   <ItemGroup>

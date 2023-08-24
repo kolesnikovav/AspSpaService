@@ -15,6 +15,8 @@ public class NodeRunner : IDisposable
     private Process _nodeProcess;
     private Uri _uri;
     private readonly Regex _regexUri = new(@"(http|https):\/\/(localhost|127\.0\.0\.1):[0-9]+");
+
+    private readonly Regex _regexSpecial = new(@"\[[0-9]+m");
     private readonly EventWaitHandle _awaiter = new(false, EventResetMode.AutoReset);
     private NodeStreamReader streamOutputReader;
     private NodeStreamReader streamErrorReader;
@@ -58,54 +60,19 @@ public class NodeRunner : IDisposable
         get => _uri;
     }
 
-    private System.Security.SecureString ConvertToSecureString(string password)
-    {
-        if (password == null)
-            throw new ArgumentNullException("password");
-
-        var securePassword = new System.Security.SecureString();
-
-        foreach (char c in password)
-            securePassword.AppendChar(c);
-
-        securePassword.MakeReadOnly();
-        return securePassword;
-    }
-
     private ProcessStartInfo GetProcessStartInfo()
     {
         var exeCmd = OperatingSystem.IsWindows() ? "cmd" : Command;
-
         var argumentsLaunch = OperatingSystem.IsWindows() ? $"/c {Command} {Arguments}" : Arguments;
-        ProcessStartInfo p;
-        if (OperatingSystem.IsWindows())
+        ProcessStartInfo p = new(exeCmd)
         {
-            p = new(exeCmd)
-            {
-                Arguments = argumentsLaunch,
-                UseShellExecute = false,
-                WorkingDirectory = WorkingDirectory,
-                WindowStyle = ProcessWindowStyle.Hidden,
-                Domain = Environment.UserDomainName,
-                UserName = Environment.UserName,
-                RedirectStandardInput = true,
-                RedirectStandardOutput = true,
-                RedirectStandardError = true
-            };
-        }
-        else
-        {
-            p = new(exeCmd)
-            {
-                Arguments = argumentsLaunch,
-                UseShellExecute = false,
-                WorkingDirectory = WorkingDirectory,
-                RedirectStandardInput = true,
-                RedirectStandardOutput = true,
-                RedirectStandardError = true
-            };
-        }
-
+            Arguments = argumentsLaunch,
+            UseShellExecute = false,
+            WorkingDirectory = WorkingDirectory,
+            RedirectStandardInput = true,
+            RedirectStandardOutput = true,
+            RedirectStandardError = true
+        };
         if (EnvVars != null)
         {
             foreach (var keyValuePair in EnvVars)
@@ -115,13 +82,27 @@ public class NodeRunner : IDisposable
         }
         return p;
     }
+   
     private void OnResiveLineResult(string line)
     {
-        var u = _regexUri.Match(line);
-        if (u.Success)
+        var s_prepared = line.Replace("\u001b",string.Empty);
+        try
         {
-            _uri = new Uri(u.Value);
-            _awaiter.Set();
+            var s_fin = _regexSpecial.Replace(s_prepared, "") ?? "".Trim();
+            if (s_fin.EndsWith(@"\")) 
+            {
+                s_fin = s_fin[..^1];
+            }
+            var u = _regexUri.Match(s_fin);
+            if (u.Success)
+            {
+                _uri = new Uri(u.Value);
+                _awaiter.Set();
+            }            
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine(ex.Message);
         }
     }
     /// <summary>

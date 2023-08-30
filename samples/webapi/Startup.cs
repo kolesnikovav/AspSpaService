@@ -27,7 +27,7 @@ namespace webapi
             //     }
             // );
             // this block starts vite spa application
-            var p = Path.Combine(wd,"spa-app", "hello-vite");
+            var p = Path.Combine(wd,"samples", "hello-vite");
             app.UseSpa(
                 spa => {
                     spa.UseAspSpaDevelopmentServer(hostApplicationLifetime, "yarn", "dev", p, new Dictionary<string,string>(), TimeSpan.FromSeconds(15), null, true,true);

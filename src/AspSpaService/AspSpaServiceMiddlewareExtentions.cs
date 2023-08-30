@@ -93,7 +93,7 @@ public static class AspSpaServiceMiddlewareExtensions
     ///
     /// </summary>
     /// <param name="spaBuilder">The <see cref="ApplicationBuilder"/>.</param>
-    /// <param name="applicationLifetime">The <see cref="IHostApplicationLifetime"/>.</param>
+    /// <param name="applicationLifetime">For correct dispose of nodejs process. The <see cref="IHostApplicationLifetime"/>.</param>
     /// <param name="command">The command or file name to start dev server.</param>
     /// <param name="arguments">Arguments to start dev server.</param>
     /// <param name="workingDirectory">WorkingDirectory for node dev  server</param>
@@ -146,35 +146,24 @@ public static class AspSpaServiceMiddlewareExtensions
         {
 
         }
-        applicationLifetime.ApplicationStopping.Register(()=>{
+        applicationLifetime.ApplicationStopping.Register(() =>
+        {
             NodeRunner r = GetNodeRunner(spaBuilder.ApplicationBuilder);
-            if (r != null) {
+            if (r != null)
+            {
                 try
                 {
-                r.Dispose();
-                logger.LogInformation("Node JS Process disposed");                     
+                    r.Dispose();
+                    logger.LogInformation("Node JS Process disposed");
 
                 }
                 catch
                 {
-                    
+
                 }
-               
             }
-        });        
+        });
     }    
-
-
-    // public static void AddNodeRunner(this IServiceCollection services, IHostApplicationLifetime applicationLifetime)
-    // {
-    //     services.AddSingleton<NodeRunner>();
-    //     applicationLifetime.ApplicationStopping.Register(()=>{
-    //         Console.WriteLine("fsdasfasdfd");
-    //     });
-    // }
-
-
-
 
     private static ILogger GetOrCreateLogger(
         IApplicationBuilder appBuilder,

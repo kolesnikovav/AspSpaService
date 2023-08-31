@@ -12,7 +12,7 @@ namespace webapi
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, IHostApplicationLifetime hostApplicationLifetime)
         {
             if (env.IsDevelopment())
             {
@@ -30,7 +30,7 @@ namespace webapi
             var p = Path.Combine(wd,"samples", "hello-vite");
             app.UseSpa(
                 spa => {
-                    spa.UseAspSpaDevelopmentServer("yarn", "dev", p, new Dictionary<string,string>(), TimeSpan.FromSeconds(15), null, true);
+                    spa.UseAspSpaDevelopmentServer(hostApplicationLifetime, "yarn", "dev", p, new Dictionary<string,string>(), TimeSpan.FromSeconds(15), null, true,true);
                 }
             );
             // this block starts nuxt spa application

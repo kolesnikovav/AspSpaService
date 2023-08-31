@@ -9,6 +9,17 @@
             "program": "${workspaceFolder}/samples/webapi/bin/Debug/net7.0/webapi.dll",
             "args": [],
             "cwd": "${workspaceFolder}",
+            "justMyCode":false,
+            "enableStepFiltering": false,
+            "requireExactSource": false,
+            "symbolOptions": {
+                "searchMicrosoftSymbolServer": true, // get pdb files from ms symbol server
+                "searchNuGetOrgSymbolServer": true,
+                "moduleFilter": {
+                    "mode": "loadAllButExcluded",
+                    "excludedModules": []
+                }
+            },            
             "stopAtEntry": false,
             "serverReadyAction": {
                 "action": "openExternally",

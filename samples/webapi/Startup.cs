@@ -12,12 +12,21 @@ namespace webapi
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, IHostApplicationLifetime hostApplicationLifetime)
         {
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
-            }
+            };
+            app.UseRouting();
+            app.UseEndpoints(endpoints =>
+            {
+               endpoints.MapGet("/hello", async context =>
+                {
+                    await context.Response.WriteAsync($"Hello from {context.GetEndpoint()}!");
+                });
+           });            
+
             var wd = Directory.GetCurrentDirectory();
             // this block starts vue spa application
             // var p = Path.Combine(wd,"samples", "hello-vue");
@@ -30,7 +39,7 @@ namespace webapi
             var p = Path.Combine(wd,"samples", "hello-vite");
             app.UseSpa(
                 spa => {
-                    spa.UseAspSpaDevelopmentServer("yarn", "dev", p, new Dictionary<string,string>(), TimeSpan.FromSeconds(15), null, true);
+                    spa.UseAspSpaDevelopmentServer(hostApplicationLifetime, "yarn", "dev", p, new Dictionary<string,string>(), TimeSpan.FromSeconds(15), null, true,true);
                 }
             );
             // this block starts nuxt spa application

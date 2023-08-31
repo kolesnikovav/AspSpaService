@@ -33,7 +33,7 @@ using AspSpaService;
             services.AddNodeRunner();
         }
 
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, IHostApplicationLifetime hostApplicationLifetime)
         {
             // ---- Your code -----------//
             //this block starts vue spa application
@@ -42,6 +42,9 @@ using AspSpaService;
             app.UseSpa(
                 spa => {
                     spa.UseAspSpaDevelopmentServer(
+                        // for dispose nodejs process
+                        // after application close
+                        hostApplicationLifetime,
                         // command for nodejs process
                         // string
                         "yarn",
@@ -84,7 +87,7 @@ In folder sample/webapi has the web empty project that shows, how to use your fa
 This code should be placed in Startup class in Configure method
 ### Vue
 ```cs
-public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+public void Configure(IApplicationBuilder app, IWebHostEnvironment env, IHostApplicationLifetime hostApplicationLifetime)
 {
     // ---- Your code -----------//
     //this block starts vue spa application
@@ -92,7 +95,7 @@ public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
     var p = Path.Combine(wd,"samples", "hello-vue"); // path to your vuejs project
     app.UseSpa(
         spa => {
-            spa.UseAspSpaDevelopmentServer("yarn", "serve", p, new Dictionary<string,string>(), TimeSpan.FromSeconds(15), "Timeout has been exceeded");
+            spa.UseAspSpaDevelopmentServer(hostApplicationLifetime, "yarn", "serve", p, new Dictionary<string,string>(), TimeSpan.FromSeconds(15), "Timeout has been exceeded");
         }
     );
 }
@@ -100,7 +103,7 @@ public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
 ```
 ### Vite
 ```cs
-public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+public void Configure(IApplicationBuilder app, IWebHostEnvironment env, IHostApplicationLifetime hostApplicationLifetime)
 {
     // ---- Your code -----------//
     //this block starts vite spa application
@@ -108,7 +111,7 @@ public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
     var p = Path.Combine(wd,"samples", "hello-vite"); // path to your vitejs project
     app.UseSpa(
         spa => {
-            spa.UseAspSpaDevelopmentServer("yarn", "dev", p, new Dictionary<string,string>(), TimeSpan.FromSeconds(15), "Timeout has been exceeded");
+            spa.UseAspSpaDevelopmentServer(hostApplicationLifetime,"yarn", "dev", p, new Dictionary<string,string>(), TimeSpan.FromSeconds(15), "Timeout has been exceeded");
         }
     );
 }
@@ -116,7 +119,7 @@ public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
 ```
 ### Nuxt
 ```cs
-public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+public void Configure(IApplicationBuilder app, IWebHostEnvironment env, IHostApplicationLifetime hostApplicationLifetime)
 {
     // ---- Your code -----------//
     //this block starts nuxt spa application
@@ -124,7 +127,7 @@ public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
     var p = Path.Combine(wd,"samples", "hello-nuxt"); // path to your nuxt project
     app.UseSpa(
         spa => {
-            spa.UseAspSpaDevelopmentServer("yarn", "dev", p, new Dictionary<string,string>(), TimeSpan.FromSeconds(15), "Timeout has been exceeded");
+            spa.UseAspSpaDevelopmentServer(hostApplicationLifetime, "yarn", "dev", p, new Dictionary<string,string>(), TimeSpan.FromSeconds(15), "Timeout has been exceeded");
         }
     );
 }
@@ -132,7 +135,7 @@ public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
 ```
 ### React
 ```cs
-public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+public void Configure(IApplicationBuilder app, IWebHostEnvironment env, IHostApplicationLifetime hostApplicationLifetime)
 {
     // ---- Your code -----------//
     //this block starts react spa application
@@ -140,7 +143,7 @@ public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
     var p = Path.Combine(wd,"samples", "hello-react"); // path to your react project
     app.UseSpa(
         spa => {
-            spa.UseAspSpaDevelopmentServer("yarn", "start", p, new Dictionary<string,string>(), TimeSpan.FromSeconds(15), "Timeout has been exceeded");
+            spa.UseAspSpaDevelopmentServer(hostApplicationLifetime,"yarn", "start", p, new Dictionary<string,string>(), TimeSpan.FromSeconds(15), "Timeout has been exceeded");
         }
     );
 }
@@ -149,7 +152,7 @@ public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
 ### Svelte
 Note. Because Svelte and AspNetCore, by default, use the same port (5000), the port of Svelte should be changed!!!
 ```cs
-public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+public void Configure(IApplicationBuilder app, IWebHostEnvironment env, IHostApplicationLifetime hostApplicationLifetime)
 {
     // ---- Your code -----------//
     //this block starts svelte spa application
@@ -157,7 +160,7 @@ public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
     var p = Path.Combine(wd,"samples", "hello-svelte"); // path to your svelte project
     app.UseSpa(
         spa => {
-            spa.UseAspSpaDevelopmentServer("yarn", "dev", p, new Dictionary<string,string>(), TimeSpan.FromSeconds(15), "Timeout has been exceeded");
+            spa.UseAspSpaDevelopmentServer(hostApplicationLifetime, "yarn", "dev", p, new Dictionary<string,string>(), TimeSpan.FromSeconds(15), "Timeout has been exceeded");
         }
     );
 }

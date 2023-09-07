@@ -17,7 +17,16 @@ namespace webapi
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
-            }
+            };
+            app.UseRouting();
+            app.UseEndpoints(endpoints =>
+            {
+               endpoints.MapGet("/hello", async context =>
+                {
+                    await context.Response.WriteAsync($"Hello from {context.GetEndpoint()}!");
+                });
+           });            
+
             var wd = Directory.GetCurrentDirectory();
             // this block starts vue spa application
             // var p = Path.Combine(wd,"samples", "hello-vue");

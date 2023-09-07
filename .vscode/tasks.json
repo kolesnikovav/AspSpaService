@@ -19,6 +19,11 @@
                 "reveal": "silent"
             },
             "problemMatcher": "$msCompile"
-        }
+        },
+        {
+            "label": "Close term",
+            "type": "shell",
+            "command": "killall -SIGTERM Terminal"
+        }        
     ]
 }

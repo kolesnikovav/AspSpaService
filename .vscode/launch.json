@@ -10,6 +10,7 @@
             "args": [],
             "cwd": "${workspaceFolder}",
             "justMyCode":false,
+            "postDebugTask": "Close term",
             "enableStepFiltering": false,
             "requireExactSource": false,
             "symbolOptions": {

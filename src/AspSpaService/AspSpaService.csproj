@@ -1,9 +1,9 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net7.0</TargetFramework>
+    <TargetFramework>net8.0</TargetFramework>
     <PackageId>AspSpaService</PackageId>
-    <Version>1.0.5</Version>
+    <Version>1.0.6</Version>
     <Authors>Aleksandr Kolesnikov</Authors>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <AssemblyName>AspSpaService</AssemblyName>
@@ -16,13 +16,13 @@
     <Description>The Asp Net Core plugin for integrating SPA application with Asp Net Core. This plugin can be used with any web framework in same manner.</Description>
     <Keywords>ASP;Asp Net Core; SPA; vue; vite; nuxt; react; svelte</Keywords>
     <PackageReadmeFile>README.md</PackageReadmeFile>
-    <LangVersion>11.0</LangVersion>
+    <LangVersion>12.0</LangVersion>
   </PropertyGroup>
 
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.SpaServices" Version="3.1.32" />
-    <PackageReference Include="Microsoft.AspNetCore.SpaServices.Extensions" Version="7.0.9" />
-    <PackageReference Include="Microsoft.Extensions.Logging" Version="7.0.0" />
+    <PackageReference Include="Microsoft.AspNetCore.SpaServices.Extensions" Version="8.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Logging" Version="8.0.0" />
     <None Include="README.md" Pack="true" PackagePath="\"/>
   </ItemGroup>
 

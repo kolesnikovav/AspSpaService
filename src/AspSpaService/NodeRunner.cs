@@ -10,13 +10,13 @@ namespace AspSpaService;
     /// <summary>
     /// Node JS Process starter
     /// </summary>
-public class NodeRunner : IDisposable
+public partial class NodeRunner : IDisposable
 {
     private Process _nodeProcess;
     private Uri _uri;
-    private readonly Regex _regexUri = new(@"(http|https):\/\/(localhost|127\.0\.0\.1):[0-9]+");
+    private readonly Regex _regexUri = RegexUri();
 
-    private readonly Regex _regexSpecial = new(@"\[[0-9]+m");
+    private readonly Regex _regexSpecial = RegexSpecial();
     private readonly EventWaitHandle _awaiter = new(false, EventResetMode.AutoReset);
     private NodeStreamReader streamOutputReader;
     private NodeStreamReader streamErrorReader;
@@ -43,7 +43,7 @@ public class NodeRunner : IDisposable
     /// <summary>
     /// Environment variables for node process
     /// </summary>
-    public Dictionary<string, string> EnvVars { get; set; } = new Dictionary<string, string>();
+    public Dictionary<string, string> EnvVars { get; set; } = [];
     /// <summary>
     /// Log Node JS Process messages
     /// </summary>
@@ -194,5 +194,10 @@ public class NodeRunner : IDisposable
         streamOutputReader?.Dispose();
         streamErrorReader?.Dispose();
     }
+
+    [GeneratedRegex(@"(http|https):\/\/(localhost|127\.0\.0\.1):[0-9]+")]
+    private static partial Regex RegexUri();
+    [GeneratedRegex(@"\[[0-9]+m")]
+    private static partial Regex RegexSpecial();
 }
 

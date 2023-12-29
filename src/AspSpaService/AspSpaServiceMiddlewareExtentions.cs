@@ -6,6 +6,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
 using Microsoft.AspNetCore.SpaServices;
 using Microsoft.Extensions.Hosting;
+using System.IO;
 
 namespace AspSpaService;
 
@@ -29,6 +30,17 @@ public static class AspSpaServiceMiddlewareExtensions
     {
         return (NodeRunner)builder.ApplicationServices.GetService(typeof(NodeRunner));
     }
+    private static void CheckValidNodeJSProjectFolder(string folderPath)
+    {
+        if (!Directory.Exists(folderPath))
+        {
+            throw new ArgumentException("Folder :" + folderPath + " does not exists, or unaccessible");
+        }
+        if (Directory.GetFiles(folderPath,"package.json",SearchOption.TopDirectoryOnly).Length == 0)
+        {
+            throw new ArgumentException("There is no file 'package.json' in " + folderPath);
+        }
+    }    
     /// <summary>
     /// Handles requests by passing them through to an instance of the node dev server.
     /// This means you don't need to start node dev server manually.
@@ -60,6 +72,7 @@ public static class AspSpaServiceMiddlewareExtensions
         {
             throw new ArgumentNullException(nameof(spaBuilder));
         }
+        CheckValidNodeJSProjectFolder(workingDirectory);
         var logger = GetOrCreateLogger(spaBuilder.ApplicationBuilder, LogCategoryName);
         NodeRunner runner = GetNodeRunner(spaBuilder.ApplicationBuilder);
         runner ??= new NodeRunner();
@@ -116,10 +129,8 @@ public static class AspSpaServiceMiddlewareExtensions
         bool logError = false,
         bool unsubscribeWhenReady = true)
     {
-        if (spaBuilder == null)
-        {
-            throw new ArgumentNullException(nameof(spaBuilder));
-        }
+        ArgumentNullException.ThrowIfNull(spaBuilder);
+        CheckValidNodeJSProjectFolder(workingDirectory);
         var logger = GetOrCreateLogger(spaBuilder.ApplicationBuilder, LogCategoryName);
         NodeRunner runner = GetNodeRunner(spaBuilder.ApplicationBuilder);
         runner ??= new NodeRunner();
